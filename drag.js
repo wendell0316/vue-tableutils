@@ -19,9 +19,9 @@ Vue.directive('drag', {
       if (th !== dragCells[dragCells.length - 1]) {
         th.addEventListener('mousedown', function(e) {
           if (e.offsetX > e.target.clientWidth - margin) {
-            for (const setThWidth of dragCells) {
-              if (setThWidth !== dragCells[index + 1]) {
-                setThWidth.width = setThWidth.offsetWidth; // 设置除下一节点外的节点宽度
+            for (const value of dragCells) {
+              if (value !== dragCells[index + 1]) {
+                value.width = value.offsetWidth; // 设置除下一节点外的节点宽度
               }
             }
             dragCells[index + 1].width = '';  // 移除下一节点宽度
@@ -51,9 +51,9 @@ Vue.directive('drag', {
       if (positionMark.mousedown === true) {
         if (positionMark.clientOldWidth + (e.clientX - positionMark.clientX) > 0) {
           if (e.target === positionMark.target) {    //在本元素上拉长宽度
-              e.target.style.cursor = 'col-resize';
-              positionMark.clientWidth = positionMark.clientOldWidth + (e.clientX - positionMark.clientX);
-              e.target.width = positionMark.clientWidth;
+            e.target.style.cursor = 'col-resize';
+            positionMark.clientWidth = positionMark.clientOldWidth + (e.clientX - positionMark.clientX);
+            e.target.width = positionMark.clientWidth;
           } else {
             e.target.style.cursor = '';
             positionMark.clientWidth = positionMark.clientOldWidth + (e.clientX - positionMark.clientX);
