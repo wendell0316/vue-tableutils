@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>vue-directive</title>
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Helvetica Neue, Arial, sans-serif;
+      font-size: 14px;
+      color: #444;
+    }
+
+    table {
+      border: 2px solid #42b983;
+      border-radius: 3px;
+      background-color: #fff;
+      width: 100%;
+      table-layout: fixed;
+    }
+    th {
+      background-color: #42b983;
+      color: rgba(255,255,255,0.66);
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    td {
+      background-color: #f9f9f9;
+    }
+
+    th, td {
+      text-align: center;
+      height: 40px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    th.active {
+      color: #fff;
+    }
+
+    th.active .arrow {
+      opacity: 1;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="app">
+    <table v-sort="['age', 'asc']" @sort="getMark" v-drag="8">
+      <thead>
+        <tr>
+          <th sort-field="id">ROW Number</th>
+          <th sort-field="username">Username</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email Address</th>
+          <th>Gender</th>
+          <th>IP Address v4</th>
+          <th>Country</th>
+          <th>City</th>
+          <th>Avatar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="entry in gridData">
+          <td>{{entry.id}}</td>
+          <td>{{entry.username}}</td>
+          <td>{{entry.first_name}}</td>
+          <td>{{entry.last_name}}</td>
+          <td><a :href="'mailto:' + entry.email">{{entry.email}}</a></td>
+          <td>{{entry.gender}}</td>
+          <td>{{entry.ip_address}}</td>
+          <td>{{entry.country}}</td>
+          <td>{{entry.city}}</td>
+          <td><img :src="entry.avatar" alt=""></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+<script src="./sort.js"></script>
+<script src="./drag.js"></script>
+<script>
+  Vue.directive('hide', {
+    inserted(el, binding) {
+      const menu = document.createElement('i');
+      menu.className = ('fa fa-bars');
+      menu.setAttribute('aria-hidden', 'true');
+      el.appendChild(menu);
+      menu.style.marginLeft = '5px';
+      menu.addEventListener('click', function(e) {
+
+      })
+    }
+  })
+  // 创建一个 Vue 实例或 "ViewModel"
+  // 它连接 View 与 Model
+  new Vue({
+      el: '#app',
+      data: {
+        gridColumns: ['id', 'username', 'first_name', 'last_name', 'email', 'gender' , 'ip_address', 'country', 'city', 'avatar'],
+        gridData: [{"id":1,"username":"gdepaoli0","first_name":"Germaine","last_name":"De Paoli","email":"gdepaoli0@bbb.org","gender":"Male","ip_address":"14.118.158.178","country":"China","city":"Shangfang","avatar":"https://robohash.org/doloribusvelitet.png?size=50x50&set=set1"},
+        {"id":2,"username":"rlefriec1","first_name":"Rahel","last_name":"Le Friec","email":"rlefriec1@latimes.com","gender":"Female","ip_address":"101.175.179.212","country":"Poland","city":"Giebułtów","avatar":"https://robohash.org/etsitquibusdam.png?size=50x50&set=set1"},
+        {"id":3,"username":"bcasotti2","first_name":"Babara","last_name":"Casotti","email":"bcasotti2@jimdo.com","gender":"Female","ip_address":"74.178.174.252","country":"Morocco","city":"Taza","avatar":"https://robohash.org/velfugiatdignissimos.png?size=50x50&set=set1"},
+        {"id":4,"username":"dziemecki3","first_name":"Drugi","last_name":"Ziemecki","email":"dziemecki3@howstuffworks.com","gender":"Male","ip_address":"146.245.11.3","country":"Argentina","city":"Villa Constitución","avatar":"https://robohash.org/cumqueperferendiset.png?size=50x50&set=set1"},
+        {"id":5,"username":"tsitch4","first_name":"Theodora","last_name":"Sitch","email":"tsitch4@harvard.edu","gender":"Female","ip_address":"2.142.59.114","country":"Brazil","city":"Itaguaí","avatar":"https://robohash.org/voluptatibusveleos.png?size=50x50&set=set1"},
+        {"id":6,"username":"adoelle5","first_name":"Avictor","last_name":"Doelle","email":"adoelle5@sourceforge.net","gender":"Male","ip_address":"86.108.216.78","country":"Japan","city":"Yuzawa","avatar":"https://robohash.org/omniscumqueconsequatur.png?size=50x50&set=set1"},
+        {"id":7,"username":"cgroven6","first_name":"Cherice","last_name":"Groven","email":"cgroven6@zdnet.com","gender":"Female","ip_address":"92.150.50.124","country":"Brazil","city":"Rio Pardo","avatar":"https://robohash.org/idrepellendusaspernatur.png?size=50x50&set=set1"},
+        {"id":8,"username":"mborzoni7","first_name":"Maude","last_name":"Borzoni","email":"mborzoni7@statcounter.com","gender":"Female","ip_address":"61.49.21.129","country":"Russia","city":"Goyty","avatar":"https://robohash.org/consectetursuntquos.png?size=50x50&set=set1"},
+        {"id":9,"username":"jspillane8","first_name":"Jeth","last_name":"Spillane","email":"jspillane8@multiply.com","gender":"Male","ip_address":"147.197.253.161","country":"Russia","city":"Silikatnyy","avatar":"https://robohash.org/quofacereiusto.png?size=50x50&set=set1"},
+        {"id":10,"username":"pkrol9","first_name":"Patin","last_name":"Krol","email":"pkrol9@free.fr","gender":"Male","ip_address":"194.89.50.93","country":"Paraguay","city":"Itapé","avatar":"https://robohash.org/estfacereet.png?size=50x50&set=set1"},
+        {"id":11,"username":"cwignalla","first_name":"Cindy","last_name":"Wignall","email":"cwignalla@jimdo.com","gender":"Female","ip_address":"72.226.186.113","country":"Brazil","city":"Ribeirão Preto","avatar":"https://robohash.org/modiearumullam.png?size=50x50&set=set1"},
+        {"id":12,"username":"spettkob","first_name":"Scot","last_name":"Pettko","email":"spettkob@phpbb.com","gender":"Male","ip_address":"139.123.131.42","country":"France","city":"Saint-Herblain","avatar":"https://robohash.org/delenitidoloremquesoluta.png?size=50x50&set=set1"},
+        {"id":13,"username":"ttwinamec","first_name":"Theodore","last_name":"Twiname","email":"ttwinamec@dmoz.org","gender":"Male","ip_address":"100.123.37.243","country":"Portugal","city":"Mirões","avatar":"https://robohash.org/evenietnonfugit.png?size=50x50&set=set1"},
+        {"id":14,"username":"jdallmand","first_name":"Jordanna","last_name":"Dallman","email":"jdallmand@digg.com","gender":"Female","ip_address":"12.87.42.241","country":"Croatia","city":"Plaški","avatar":"https://robohash.org/autetnisi.png?size=50x50&set=set1"},
+        {"id":15,"username":"lofforde","first_name":"Lula","last_name":"Offord","email":"lofforde@zdnet.com","gender":"Female","ip_address":"148.1.252.188","country":"Gambia","city":"Baro Kunda","avatar":"https://robohash.org/odiosuntminima.png?size=50x50&set=set1"},
+        {"id":16,"username":"jipwellf","first_name":"Joice","last_name":"Ipwell","email":"jipwellf@nbcnews.com","gender":"Female","ip_address":"114.21.148.219","country":"China","city":"Xiadong","avatar":"https://robohash.org/utoptioporro.png?size=50x50&set=set1"},
+        {"id":17,"username":"msyalvesterg","first_name":"Marcile","last_name":"Syalvester","email":"msyalvesterg@squidoo.com","gender":"Female","ip_address":"215.85.80.0","country":"Canada","city":"Deep River","avatar":"https://robohash.org/expeditaoditeos.png?size=50x50&set=set1"},
+        {"id":18,"username":"jristeh","first_name":"Jorry","last_name":"Riste","email":"jristeh@4shared.com","gender":"Female","ip_address":"255.86.8.174","country":"Armenia","city":"Arrap’i","avatar":"https://robohash.org/doloreossapiente.png?size=50x50&set=set1"},
+        {"id":19,"username":"tloidli","first_name":"Tore","last_name":"Loidl","email":"tloidli@quantcast.com","gender":"Male","ip_address":"23.70.82.177","country":"China","city":"Jiangcun","avatar":"https://robohash.org/fugitcumqueillum.png?size=50x50&set=set1"},
+        {"id":20,"username":"cgirodiasj","first_name":"Cooper","last_name":"Girodias","email":"cgirodiasj@acquirethisname.com","gender":"Male","ip_address":"205.155.80.157","country":"Indonesia","city":"Alasmalang","avatar":"https://robohash.org/consequunturlaborumaccusamus.png?size=50x50&set=set1"},
+        {"id":21,"username":"dwavishk","first_name":"Drusie","last_name":"Wavish","email":"dwavishk@imdb.com","gender":"Female","ip_address":"174.194.33.153","country":"Armenia","city":"Arevik","avatar":"https://robohash.org/etnonvoluptas.png?size=50x50&set=set1"},
+        {"id":22,"username":"abattraml","first_name":"Augustine","last_name":"Battram","email":"abattraml@mapquest.com","gender":"Male","ip_address":"241.126.183.212","country":"Sweden","city":"Oskarshamn","avatar":"https://robohash.org/reprehenderitdoloresenim.png?size=50x50&set=set1"},
+        {"id":23,"username":"arunhamm","first_name":"Antonio","last_name":"Runham","email":"arunhamm@cornell.edu","gender":"Male","ip_address":"113.72.67.70","country":"Luxembourg","city":"Beckerich","avatar":"https://robohash.org/voluptasetsequi.png?size=50x50&set=set1"},
+        {"id":24,"username":"vgergoletn","first_name":"Vin","last_name":"Gergolet","email":"vgergoletn@booking.com","gender":"Female","ip_address":"55.236.33.145","country":"China","city":"Chengnan","avatar":"https://robohash.org/maximenobisquo.png?size=50x50&set=set1"},
+        {"id":25,"username":"sbuckieo","first_name":"Shanon","last_name":"Buckie","email":"sbuckieo@marriott.com","gender":"Female","ip_address":"18.125.61.244","country":"China","city":"Huangyang","avatar":"https://robohash.org/etquaeratconsequuntur.png?size=50x50&set=set1"},
+        {"id":26,"username":"marnaudp","first_name":"Merry","last_name":"Arnaud","email":"marnaudp@theguardian.com","gender":"Male","ip_address":"234.115.185.142","country":"China","city":"Shiziqiao","avatar":"https://robohash.org/numquamautalias.png?size=50x50&set=set1"},
+        {"id":27,"username":"dgodboldq","first_name":"Darby","last_name":"Godbold","email":"dgodboldq@jimdo.com","gender":"Female","ip_address":"145.48.251.211","country":"Russia","city":"Taremskoye","avatar":"https://robohash.org/voluptatesdolorut.png?size=50x50&set=set1"},
+        {"id":28,"username":"gedmandr","first_name":"Gustaf","last_name":"Edmand","email":"gedmandr@elpais.com","gender":"Male","ip_address":"227.210.179.140","country":"Indonesia","city":"Sumanding","avatar":"https://robohash.org/ametetid.png?size=50x50&set=set1"},
+        {"id":29,"username":"jharrisons","first_name":"Jasen","last_name":"Harrison","email":"jharrisons@etsy.com","gender":"Male","ip_address":"74.109.205.239","country":"Canada","city":"White Rock","avatar":"https://robohash.org/temporacumitaque.png?size=50x50&set=set1"},
+        {"id":30,"username":"faxelbyt","first_name":"Fraser","last_name":"Axelby","email":"faxelbyt@i2i.jp","gender":"Male","ip_address":"141.223.183.184","country":"Indonesia","city":"Mersam","avatar":"https://robohash.org/molestiaeassumendatemporibus.png?size=50x50&set=set1"},
+        {"id":31,"username":"asutoru","first_name":"Atlanta","last_name":"Sutor","email":"asutoru@tamu.edu","gender":"Female","ip_address":"153.199.119.93","country":"China","city":"Liuhe","avatar":"https://robohash.org/cumqueutdeleniti.png?size=50x50&set=set1"},
+        {"id":32,"username":"jsquibbv","first_name":"Jacinthe","last_name":"Squibb","email":"jsquibbv@un.org","gender":"Female","ip_address":"98.93.232.6","country":"Yemen","city":"Al Ghayl","avatar":"https://robohash.org/ullamsolutatempore.png?size=50x50&set=set1"},
+        {"id":33,"username":"ccrambiew","first_name":"Charles","last_name":"Crambie","email":"ccrambiew@forbes.com","gender":"Male","ip_address":"73.205.57.251","country":"Spain","city":"Palmas De Gran Canaria, Las","avatar":"https://robohash.org/teneturharumeum.png?size=50x50&set=set1"},
+        {"id":34,"username":"gtrustyx","first_name":"Gannon","last_name":"Trusty","email":"gtrustyx@usnews.com","gender":"Male","ip_address":"35.170.163.211","country":"Portugal","city":"Ribeiro","avatar":"https://robohash.org/nihilquamqui.png?size=50x50&set=set1"},
+        {"id":35,"username":"pcovety","first_name":"Petronille","last_name":"Covet","email":"pcovety@cbslocal.com","gender":"Female","ip_address":"120.26.96.164","country":"Portugal","city":"Portalegre","avatar":"https://robohash.org/etveritatisnumquam.png?size=50x50&set=set1"},
+        {"id":36,"username":"hsaddingtonz","first_name":"Hana","last_name":"Saddington","email":"hsaddingtonz@mediafire.com","gender":"Female","ip_address":"210.72.191.74","country":"Uganda","city":"Budaka","avatar":"https://robohash.org/voluptatemrepellatsed.png?size=50x50&set=set1"},
+        {"id":37,"username":"dsegeswoeth10","first_name":"Doralyn","last_name":"Segeswoeth","email":"dsegeswoeth10@mapquest.com","gender":"Female","ip_address":"179.87.232.22","country":"Poland","city":"Kraśnik","avatar":"https://robohash.org/auteaat.png?size=50x50&set=set1"},
+        {"id":38,"username":"dfrosch11","first_name":"Darnell","last_name":"Frosch","email":"dfrosch11@adobe.com","gender":"Male","ip_address":"209.153.96.225","country":"Morocco","city":"Teroual","avatar":"https://robohash.org/occaecatiiureaccusamus.png?size=50x50&set=set1"},
+        {"id":39,"username":"grearden12","first_name":"Gerti","last_name":"Rearden","email":"grearden12@blogger.com","gender":"Female","ip_address":"145.9.82.164","country":"Indonesia","city":"Kombandaru","avatar":"https://robohash.org/repellattemporibusquae.png?size=50x50&set=set1"},
+        {"id":40,"username":"dmorrell13","first_name":"Debi","last_name":"Morrell","email":"dmorrell13@privacy.gov.au","gender":"Female","ip_address":"145.198.133.65","country":"China","city":"Longshe","avatar":"https://robohash.org/eiussintplaceat.png?size=50x50&set=set1"},
+        {"id":41,"username":"dyardley14","first_name":"Darell","last_name":"Yardley","email":"dyardley14@indiegogo.com","gender":"Female","ip_address":"180.214.51.113","country":"Bangladesh","city":"Rājshāhi","avatar":"https://robohash.org/quamvoluptasvoluptas.png?size=50x50&set=set1"},
+        {"id":42,"username":"vtremblot15","first_name":"Viviyan","last_name":"Tremblot","email":"vtremblot15@zdnet.com","gender":"Female","ip_address":"181.9.169.229","country":"Guinea-Bissau","city":"Bafatá","avatar":"https://robohash.org/voluptateminciduntsequi.png?size=50x50&set=set1"},
+        {"id":43,"username":"hbaxendale16","first_name":"Harrie","last_name":"Baxendale","email":"hbaxendale16@tinyurl.com","gender":"Female","ip_address":"162.253.232.5","country":"Myanmar","city":"Bago","avatar":"https://robohash.org/rerumquaspraesentium.png?size=50x50&set=set1"},
+        {"id":44,"username":"cgemlbett17","first_name":"Clevey","last_name":"Gemlbett","email":"cgemlbett17@reference.com","gender":"Male","ip_address":"32.200.233.203","country":"Bangladesh","city":"Bhāndāria","avatar":"https://robohash.org/voluptatibusetesse.png?size=50x50&set=set1"},
+        {"id":45,"username":"ntindall18","first_name":"Norby","last_name":"Tindall","email":"ntindall18@omniture.com","gender":"Male","ip_address":"190.37.66.70","country":"Sweden","city":"Jönköping","avatar":"https://robohash.org/temporibusetesse.png?size=50x50&set=set1"},
+        {"id":46,"username":"phanstock19","first_name":"Pablo","last_name":"Hanstock","email":"phanstock19@purevolume.com","gender":"Male","ip_address":"83.50.170.198","country":"China","city":"Longshan","avatar":"https://robohash.org/culpapraesentiumsequi.png?size=50x50&set=set1"},
+        {"id":47,"username":"byannikov1a","first_name":"Bunni","last_name":"Yannikov","email":"byannikov1a@state.gov","gender":"Female","ip_address":"196.150.28.31","country":"Argentina","city":"San Vicente","avatar":"https://robohash.org/ipsumexercitationemsit.png?size=50x50&set=set1"},
+        {"id":48,"username":"dbraemer1b","first_name":"Didi","last_name":"Braemer","email":"dbraemer1b@cafepress.com","gender":"Female","ip_address":"203.190.255.94","country":"Russia","city":"Bolkhov","avatar":"https://robohash.org/voluptasofficiaenim.png?size=50x50&set=set1"},
+        {"id":49,"username":"melegood1c","first_name":"Mattheus","last_name":"Elegood","email":"melegood1c@prweb.com","gender":"Male","ip_address":"20.93.47.125","country":"Vietnam","city":"Nha Trang","avatar":"https://robohash.org/expeditainventoreconsequatur.png?size=50x50&set=set1"},
+        {"id":50,"username":"etitley1d","first_name":"Esdras","last_name":"Titley","email":"etitley1d@diigo.com","gender":"Male","ip_address":"30.22.204.231","country":"Greece","city":"Kariaí","avatar":"https://robohash.org/voluptasexet.png?size=50x50&set=set1"},
+        {"id":51,"username":"amates1e","first_name":"Angeline","last_name":"Mates","email":"amates1e@slideshare.net","gender":"Female","ip_address":"19.134.162.17","country":"China","city":"Tuohua","avatar":"https://robohash.org/dignissimosquiadolore.png?size=50x50&set=set1"},
+        {"id":52,"username":"kthurman1f","first_name":"Karna","last_name":"Thurman","email":"kthurman1f@xinhuanet.com","gender":"Female","ip_address":"29.125.125.110","country":"Philippines","city":"Gulod","avatar":"https://robohash.org/placeatquosaut.png?size=50x50&set=set1"},
+        {"id":53,"username":"dlamlin1g","first_name":"Drew","last_name":"Lamlin","email":"dlamlin1g@yale.edu","gender":"Male","ip_address":"193.64.61.45","country":"Philippines","city":"Baliuag","avatar":"https://robohash.org/doloremeosqui.png?size=50x50&set=set1"},
+        {"id":54,"username":"cvines1h","first_name":"Cinda","last_name":"Vines","email":"cvines1h@slideshare.net","gender":"Female","ip_address":"149.35.87.119","country":"Croatia","city":"Preko","avatar":"https://robohash.org/sedquomodi.png?size=50x50&set=set1"},
+        {"id":55,"username":"dstubbins1i","first_name":"Dannel","last_name":"Stubbins","email":"dstubbins1i@friendfeed.com","gender":"Male","ip_address":"109.83.151.93","country":"Gabon","city":"Oyem","avatar":"https://robohash.org/repellatvelitqui.png?size=50x50&set=set1"},
+        {"id":56,"username":"hcoaker1j","first_name":"Haven","last_name":"Coaker","email":"hcoaker1j@thetimes.co.uk","gender":"Male","ip_address":"204.78.137.157","country":"Netherlands","city":"Kerkrade","avatar":"https://robohash.org/illumdoloresitaque.png?size=50x50&set=set1"},
+        {"id":57,"username":"lbelfit1k","first_name":"Lyda","last_name":"Belfit","email":"lbelfit1k@dailymail.co.uk","gender":"Female","ip_address":"144.65.152.164","country":"Indonesia","city":"Ciduren","avatar":"https://robohash.org/voluptasnemoet.png?size=50x50&set=set1"},
+        {"id":58,"username":"hmackill1l","first_name":"Howey","last_name":"MacKill","email":"hmackill1l@google.pl","gender":"Male","ip_address":"32.209.128.125","country":"Russia","city":"Saransk","avatar":"https://robohash.org/estmolestiaefacilis.png?size=50x50&set=set1"},
+        {"id":59,"username":"sfirth1m","first_name":"Sukey","last_name":"Firth","email":"sfirth1m@nationalgeographic.com","gender":"Female","ip_address":"169.31.237.121","country":"Portugal","city":"Cortinhas","avatar":"https://robohash.org/similiqueetlibero.png?size=50x50&set=set1"},
+        {"id":60,"username":"sgubbin1n","first_name":"Sonny","last_name":"Gubbin","email":"sgubbin1n@time.com","gender":"Male","ip_address":"87.12.101.77","country":"Philippines","city":"Calape","avatar":"https://robohash.org/quisquamdolormolestiae.png?size=50x50&set=set1"},
+        {"id":61,"username":"kpawnsford1o","first_name":"Katherina","last_name":"Pawnsford","email":"kpawnsford1o@shop-pro.jp","gender":"Female","ip_address":"212.58.204.79","country":"Bosnia and Herzegovina","city":"Sarajevo","avatar":"https://robohash.org/ametfacereoccaecati.png?size=50x50&set=set1"},
+        {"id":62,"username":"wmenezes1p","first_name":"Willyt","last_name":"Menezes","email":"wmenezes1p@jalbum.net","gender":"Female","ip_address":"124.59.212.235","country":"Peru","city":"Huaranchal","avatar":"https://robohash.org/adipisciutcorrupti.png?size=50x50&set=set1"},
+        {"id":63,"username":"hoakhill1q","first_name":"Herman","last_name":"Oakhill","email":"hoakhill1q@mayoclinic.com","gender":"Male","ip_address":"144.129.242.215","country":"Argentina","city":"San Salvador de Jujuy","avatar":"https://robohash.org/pariaturestofficiis.png?size=50x50&set=set1"},
+        {"id":64,"username":"smatteini1r","first_name":"Sofie","last_name":"Matteini","email":"smatteini1r@furl.net","gender":"Female","ip_address":"150.198.224.9","country":"Honduras","city":"Río Blanquito","avatar":"https://robohash.org/voluptasquamlabore.png?size=50x50&set=set1"},
+        {"id":65,"username":"traisbeck1s","first_name":"Taylor","last_name":"Raisbeck","email":"traisbeck1s@elegantthemes.com","gender":"Male","ip_address":"39.139.1.98","country":"China","city":"Wuma","avatar":"https://robohash.org/accusamusperspiciatisnemo.png?size=50x50&set=set1"},
+        {"id":66,"username":"anell1t","first_name":"Addy","last_name":"Nell","email":"anell1t@gmpg.org","gender":"Female","ip_address":"23.193.172.12","country":"Russia","city":"Lyublino","avatar":"https://robohash.org/totamliberonumquam.png?size=50x50&set=set1"},
+        {"id":67,"username":"keacott1u","first_name":"Kali","last_name":"Eacott","email":"keacott1u@gov.uk","gender":"Female","ip_address":"239.209.208.4","country":"Peru","city":"Soras","avatar":"https://robohash.org/inciduntcumvelit.png?size=50x50&set=set1"},
+        {"id":68,"username":"gsimmonds1v","first_name":"Gustaf","last_name":"Simmonds","email":"gsimmonds1v@4shared.com","gender":"Male","ip_address":"3.146.122.91","country":"Brazil","city":"Capitão Poço","avatar":"https://robohash.org/uteaqueaut.png?size=50x50&set=set1"},
+        {"id":69,"username":"nteml1w","first_name":"Nevin","last_name":"Teml","email":"nteml1w@usda.gov","gender":"Male","ip_address":"234.248.89.201","country":"Macedonia","city":"Bosilovo","avatar":"https://robohash.org/eligendiexcepturivoluptatem.png?size=50x50&set=set1"},
+        {"id":70,"username":"cqueenborough1x","first_name":"Caspar","last_name":"Queenborough","email":"cqueenborough1x@slideshare.net","gender":"Male","ip_address":"78.121.242.238","country":"Vietnam","city":"Bến Cầu","avatar":"https://robohash.org/solutaconsequaturomnis.png?size=50x50&set=set1"},
+        {"id":71,"username":"ptilne1y","first_name":"Pattie","last_name":"Tilne","email":"ptilne1y@theglobeandmail.com","gender":"Female","ip_address":"170.228.182.111","country":"Portugal","city":"Alqueva","avatar":"https://robohash.org/quidemnihilerror.png?size=50x50&set=set1"},
+        {"id":72,"username":"wyielding1z","first_name":"Wallie","last_name":"Yielding","email":"wyielding1z@wix.com","gender":"Male","ip_address":"126.246.35.74","country":"Venezuela","city":"Camatagua","avatar":"https://robohash.org/molestiaemolestiaesimilique.png?size=50x50&set=set1"},
+        {"id":73,"username":"eziemke20","first_name":"Euphemia","last_name":"Ziemke","email":"eziemke20@who.int","gender":"Female","ip_address":"233.134.182.64","country":"Nigeria","city":"Shani","avatar":"https://robohash.org/quiaomnisquas.png?size=50x50&set=set1"},
+        {"id":74,"username":"kcovotti21","first_name":"Kaitlin","last_name":"Covotti","email":"kcovotti21@miitbeian.gov.cn","gender":"Female","ip_address":"23.63.196.68","country":"Sweden","city":"Eskilstuna","avatar":"https://robohash.org/accusantiummolestiaeet.png?size=50x50&set=set1"},
+        {"id":75,"username":"ahoyt22","first_name":"Antonino","last_name":"Hoyt","email":"ahoyt22@symantec.com","gender":"Male","ip_address":"252.214.210.210","country":"Indonesia","city":"Cilampuyang","avatar":"https://robohash.org/sapienteipsumprovident.png?size=50x50&set=set1"},
+        {"id":76,"username":"aloddon23","first_name":"Antin","last_name":"Loddon","email":"aloddon23@clickbank.net","gender":"Male","ip_address":"207.11.170.237","country":"Brazil","city":"Santa Vitória do Palmar","avatar":"https://robohash.org/delenitivelitanimi.png?size=50x50&set=set1"},
+        {"id":77,"username":"dslegg24","first_name":"Deidre","last_name":"Slegg","email":"dslegg24@creativecommons.org","gender":"Female","ip_address":"227.65.44.136","country":"Philippines","city":"Rosario","avatar":"https://robohash.org/quibusdamculpaofficiis.png?size=50x50&set=set1"},
+        {"id":78,"username":"gdablin25","first_name":"Gib","last_name":"Dablin","email":"gdablin25@biblegateway.com","gender":"Male","ip_address":"42.155.220.127","country":"Bolivia","city":"San Juan del Surutú","avatar":"https://robohash.org/errorsuscipitatque.png?size=50x50&set=set1"},
+        {"id":79,"username":"dsyne26","first_name":"Darius","last_name":"Syne","email":"dsyne26@godaddy.com","gender":"Male","ip_address":"17.123.169.250","country":"Lithuania","city":"Salantai","avatar":"https://robohash.org/voluptatemagniofficiis.png?size=50x50&set=set1"},
+        {"id":80,"username":"mchesman27","first_name":"Mercedes","last_name":"Chesman","email":"mchesman27@statcounter.com","gender":"Female","ip_address":"167.30.239.14","country":"Panama","city":"Chitré","avatar":"https://robohash.org/eaveroreiciendis.png?size=50x50&set=set1"},
+        {"id":81,"username":"iedwicker28","first_name":"Iggy","last_name":"Edwicker","email":"iedwicker28@google.co.jp","gender":"Male","ip_address":"96.103.70.223","country":"China","city":"Matou","avatar":"https://robohash.org/suntautaccusamus.png?size=50x50&set=set1"},
+        {"id":82,"username":"tsole29","first_name":"Thibaut","last_name":"Sole","email":"tsole29@hc360.com","gender":"Male","ip_address":"2.114.2.173","country":"Indonesia","city":"Padas","avatar":"https://robohash.org/perferendisnihildolorum.png?size=50x50&set=set1"},
+        {"id":83,"username":"pkegan2a","first_name":"Pam","last_name":"Kegan","email":"pkegan2a@about.com","gender":"Female","ip_address":"73.82.117.105","country":"Ukraine","city":"Novohrad-Volyns’kyy","avatar":"https://robohash.org/ullameumut.png?size=50x50&set=set1"},
+        {"id":84,"username":"olynthal2b","first_name":"Olivero","last_name":"Lynthal","email":"olynthal2b@ted.com","gender":"Male","ip_address":"180.150.247.187","country":"Germany","city":"Augsburg","avatar":"https://robohash.org/sintetneque.png?size=50x50&set=set1"},
+        {"id":85,"username":"dleehane2c","first_name":"Dian","last_name":"Leehane","email":"dleehane2c@tiny.cc","gender":"Female","ip_address":"72.15.113.206","country":"United Kingdom","city":"Linton","avatar":"https://robohash.org/impeditvoluptatenon.png?size=50x50&set=set1"},
+        {"id":86,"username":"efarfalameev2d","first_name":"Elvis","last_name":"Farfalameev","email":"efarfalameev2d@slashdot.org","gender":"Male","ip_address":"144.110.187.224","country":"China","city":"Xiangxiang","avatar":"https://robohash.org/doloremdoloribusquia.png?size=50x50&set=set1"},
+        {"id":87,"username":"scosins2e","first_name":"Siobhan","last_name":"Cosins","email":"scosins2e@wufoo.com","gender":"Female","ip_address":"248.212.177.146","country":"Portugal","city":"Veiga","avatar":"https://robohash.org/idconsequaturomnis.png?size=50x50&set=set1"},
+        {"id":88,"username":"vstirzaker2f","first_name":"Viki","last_name":"Stirzaker","email":"vstirzaker2f@virginia.edu","gender":"Female","ip_address":"6.164.232.153","country":"Sweden","city":"Hässelby","avatar":"https://robohash.org/commodieligendiodio.png?size=50x50&set=set1"},
+        {"id":89,"username":"askates2g","first_name":"Ardeen","last_name":"Skates","email":"askates2g@bbb.org","gender":"Female","ip_address":"0.20.51.108","country":"Brazil","city":"Patos","avatar":"https://robohash.org/nonautemincidunt.png?size=50x50&set=set1"},
+        {"id":90,"username":"ihailey2h","first_name":"Ilyse","last_name":"Hailey","email":"ihailey2h@rediff.com","gender":"Female","ip_address":"57.212.202.229","country":"Poland","city":"Skorogoszcz","avatar":"https://robohash.org/etetvoluptate.png?size=50x50&set=set1"},
+        {"id":91,"username":"delmer2i","first_name":"Duffy","last_name":"Elmer","email":"delmer2i@instagram.com","gender":"Male","ip_address":"195.81.253.141","country":"China","city":"Zonghan","avatar":"https://robohash.org/facererepudiandaeiste.png?size=50x50&set=set1"},
+        {"id":92,"username":"ddecourt2j","first_name":"Dawna","last_name":"Decourt","email":"ddecourt2j@tinyurl.com","gender":"Female","ip_address":"45.106.208.93","country":"Brazil","city":"Mangaratiba","avatar":"https://robohash.org/voluptatesdelectusenim.png?size=50x50&set=set1"},
+        {"id":93,"username":"cwehnerr2k","first_name":"Cooper","last_name":"Wehnerr","email":"cwehnerr2k@mtv.com","gender":"Male","ip_address":"39.170.41.185","country":"Sweden","city":"Mölnlycke","avatar":"https://robohash.org/quodvelaliquam.png?size=50x50&set=set1"},
+        {"id":94,"username":"hrichardin2l","first_name":"Hattie","last_name":"Richardin","email":"hrichardin2l@trellian.com","gender":"Female","ip_address":"57.252.252.198","country":"Israel","city":"Na'ale","avatar":"https://robohash.org/itaquevelut.png?size=50x50&set=set1"},
+        {"id":95,"username":"cvaulkhard2m","first_name":"Caron","last_name":"Vaulkhard","email":"cvaulkhard2m@fastcompany.com","gender":"Female","ip_address":"28.5.215.196","country":"France","city":"Paris La Défense","avatar":"https://robohash.org/necessitatibusinventorelaboriosam.png?size=50x50&set=set1"},
+        {"id":96,"username":"dpoulett2n","first_name":"Ddene","last_name":"Poulett","email":"dpoulett2n@addtoany.com","gender":"Female","ip_address":"0.173.255.97","country":"Philippines","city":"Panan","avatar":"https://robohash.org/expeditaaliquidfacilis.png?size=50x50&set=set1"},
+        {"id":97,"username":"pgrelak2o","first_name":"Puff","last_name":"Grelak","email":"pgrelak2o@infoseek.co.jp","gender":"Male","ip_address":"98.110.128.49","country":"Indonesia","city":"Enrekang","avatar":"https://robohash.org/repudiandaenostrumrerum.png?size=50x50&set=set1"},
+        {"id":98,"username":"arenzini2p","first_name":"Antonella","last_name":"Renzini","email":"arenzini2p@phoca.cz","gender":"Female","ip_address":"73.2.144.25","country":"Indonesia","city":"Pasarnangka","avatar":"https://robohash.org/quasivoluptatumnostrum.png?size=50x50&set=set1"},
+        {"id":99,"username":"jdilston2q","first_name":"Jenda","last_name":"Dilston","email":"jdilston2q@newyorker.com","gender":"Female","ip_address":"176.172.84.124","country":"Nepal","city":"Hitura","avatar":"https://robohash.org/eosoccaecatidignissimos.png?size=50x50&set=set1"},
+        {"id":100,"username":"bghidotti2r","first_name":"Boonie","last_name":"Ghidotti","email":"bghidotti2r@weebly.com","gender":"Male","ip_address":"24.23.64.176","country":"Indonesia","city":"Sinargalih","avatar":"https://robohash.org/etadneque.png?size=50x50&set=set1"},
+        ]
+      },
+      methods: {
+        getMark(e) {
+          const nameMark = e.detail.nameMark;
+          const sortMark = e.detail.sortMark;
+          const initSort = e.detail.initSort;
+          console.log(e.detail)
+
+          this.gridData.sort(function (a, b) {
+
+            if (typeof(a[nameMark]) === 'number') {
+              if (sortMark === 'desc') {
+                return b[nameMark] - a[nameMark];
+              }
+              else if (sortMark === 'asc') {
+                return a[nameMark] - b[nameMark];
+              }
+              else {
+                return a[nameMark] - b[nameMark];
+              }
+            } else {
+              if (sortMark === 'desc') {
+                return b[nameMark].localeCompare(a[nameMark]);
+              }
+              else if (sortMark === 'asc') {
+                return a[nameMark].localeCompare(b[nameMark]);
+              }
+              else {
+                return a[nameMark].localeCompare(b[nameMark]);
+              }
+            }
+          })
+        },
+      }
+  })
+</script>
+</html>
