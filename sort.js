@@ -18,8 +18,8 @@ Vue.directive('sort', {
         sortArrow.style.cursor = 'pointer';
         sortArrow.setAttribute('aria-hidden', 'true');
         const spanDom = sortArrow.closest('span');
-          spanDom.style.cursor = 'pointer';
-          spanDom.addEventListener('click', function(e) {
+        spanDom.style.cursor = 'pointer';
+        spanDom.addEventListener('click', function(e) {
           mark.nameMark = cell.getAttribute('sort-field');
           if (sortActive === '' || sortActive === cell.getAttribute('sort-field')) {    //点击本节点时
             sortActive = cell.getAttribute('sort-field');
@@ -43,7 +43,7 @@ Vue.directive('sort', {
             }
           } else {                                              //点击其他元素时
             for (const dom of Array.from(spanDom.closest('tr').children)) {
-              if(dom.getAttribute('sort-field') === sortActive) {
+              if (dom.getAttribute('sort-field') === sortActive) {
                 sortArrow.classList.remove('fa-sort');
                 sortArrow.classList.add('fa-sort-desc');
                 dom.childNodes[0].childNodes[1].classList.remove('fa-sort-desc');

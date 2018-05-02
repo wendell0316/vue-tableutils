@@ -199,10 +199,7 @@
           const nameMark = e.detail.nameMark;
           const sortMark = e.detail.sortMark;
           const initSort = e.detail.initSort;
-          console.log(e.detail)
-
           this.gridData.sort(function (a, b) {
-
             if (typeof(a[nameMark]) === 'number') {
               if (sortMark === 'desc') {
                 return b[nameMark] - a[nameMark];
@@ -224,7 +221,7 @@
                 return a[nameMark].localeCompare(b[nameMark]);
               }
             }
-          })
+          });
         },
       }
   })
