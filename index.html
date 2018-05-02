@@ -50,7 +50,7 @@
 </head>
 <body>
   <div id="app">
-    <table v-sort="['age', 'asc']" @sort="getMark" v-drag="8">
+    <table v-sort="['username', 'asc']" @sort="getMark" v-drag="8">
       <thead>
         <tr>
           <th sort-field="id">ROW Number</th>
@@ -198,7 +198,6 @@
         getMark(e) {
           const nameMark = e.detail.nameMark;
           const sortMark = e.detail.sortMark;
-          const initSort = e.detail.initSort;
           this.gridData.sort(function (a, b) {
             if (typeof(a[nameMark]) === 'number') {
               if (sortMark === 'desc') {

@@ -5,9 +5,13 @@ Vue.directive('sort', {
     /**@type {boolean}*/
     let isRight = false;
     const mark = {
-      nameMark: binding.value[0],
-      sortMark: binding.value[1],
+      nameMark: '',
+      sortMark: '',
     };
+    if (binding.value) {
+      mark.nameMark = binding.value[0];
+      mark.sortMark = binding.value[1];
+    }
     for (const cell of sortCells) {
       if (cell.hasAttribute('sort-field')) {
         if (mark.nameMark === cell.getAttribute('sort-field')) {
@@ -59,7 +63,7 @@ Vue.directive('sort', {
       }
     }
     if (isRight) {
-      vnode.elm.dispatchEvent(new CustomEvent('sort', {detail: '初始化排序成功'}));
+      vnode.elm.dispatchEvent(new CustomEvent('sort', {detail: mark}));
     } else {
       throw new Error("初始化排序失败，检查拼写或查看是否绑定'sort-field'");
     }
