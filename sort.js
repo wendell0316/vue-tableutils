@@ -13,11 +13,11 @@ Vue.directive('sort', {
         if (mark.nameMark === cell.getAttribute('sort-field')) {
           isRight = true;
         }
-        cell.innerHTML = `<span>${cell.innerHTML} <i class='fa fa-sort'></i></span>`
-        const sortArrow = cell.querySelector('.fa-sort')
+        cell.innerHTML = `<span>${cell.innerHTML} <i class='fa fa-sort'></i></span>`;
+        const sortArrow = cell.querySelector('.fa-sort');
         sortArrow.style.cursor = 'pointer';
         sortArrow.setAttribute('aria-hidden', 'true');
-        const spanDom = sortArrow.closest('span')
+        const spanDom = sortArrow.closest('span');
           spanDom.style.cursor = 'pointer';
           spanDom.addEventListener('click', function(e) {
           mark.nameMark = cell.getAttribute('sort-field');
@@ -52,7 +52,7 @@ Vue.directive('sort', {
                 mark.sortMark = 'desc';
               }
             }
-            sortActive = cell.getAttribute('sort-field')
+            sortActive = cell.getAttribute('sort-field');
           }
           vnode.elm.dispatchEvent(new CustomEvent('sort', {detail: mark}));
         })

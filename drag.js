@@ -3,7 +3,7 @@ Vue.directive('drag', {
     el.style.boxSizing = 'border-box';
     const dragCells = Array.from(el.tHead.rows[0].cells);
     let margin = 10;
-    if(binding.value) {
+    if (binding.value) {
       margin = binding.value;
     }
     let changeCellWidth;
@@ -20,7 +20,7 @@ Vue.directive('drag', {
         th.addEventListener('mousedown', function(e) {
           if (e.offsetX > e.target.clientWidth - margin) {
             for (const setThWidth of dragCells) {
-              if(setThWidth !== dragCells[index + 1]) {
+              if (setThWidth !== dragCells[index + 1]) {
                 setThWidth.width = setThWidth.offsetWidth; // 设置除下一节点外的节点宽度
               }
             }
@@ -38,15 +38,15 @@ Vue.directive('drag', {
           th.style.cursor = 'col-resize';
         } else {
           th.style.cursor = '';
-        };
+        }
       });
     }
     document.addEventListener('mouseup', function (e) {
-      if(positionMark.mousedown) {
+      if (positionMark.mousedown) {
         dragCells[positionMark.positionTh].width = dragCells[positionMark.positionTh].clientWidth; // 设置下一节点的节点宽度
-      };
+      }
       positionMark.mousedown = false;
-    })
+    });
     el.addEventListener('mousemove', function (e) {
       if (positionMark.mousedown === true) {
         if (positionMark.clientOldWidth + (e.clientX - positionMark.clientX) > 0) {
@@ -58,9 +58,9 @@ Vue.directive('drag', {
             e.target.style.cursor = '';
             positionMark.clientWidth = positionMark.clientOldWidth + (e.clientX - positionMark.clientX);
             positionMark.target.width = positionMark.clientWidth;
-          };
-        };
-      };
+          }
+        }
+      }
     });
   }
-})
+});
