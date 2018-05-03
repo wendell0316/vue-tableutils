@@ -50,7 +50,7 @@
 </head>
 <body>
   <div id="app">
-    <table v-sort="['username', 'asc']" @sort="getMark" v-drag="8">
+    <table v-sort="init" @sort="getMark" v-drag="8">
       <thead>
         <tr>
           <th sort-field="id">ROW Number</th>
@@ -216,18 +216,20 @@
   };
 
   new Vue({
-      el: '#app',
-      data: {
-        gridColumns: ['id', 'username', 'first_name', 'last_name', 'email', 'gender' , 'ip_address', 'country', 'city', 'avatar'],
-        gridData: [],
+    el: '#app',
+    data: {
+      gridColumns: ['id', 'username', 'first_name', 'last_name', 'email', 'gender' , 'ip_address', 'country', 'city', 'avatar'],
+      gridData: [],
+      init: ['username', 'desc'],
+    },
+    async created() {
+      this.gridData = await fetchData(...this.init);
+    },
+    methods: {
+      async getMark() {
+        this.gridData = await fetchData(...this.init);
       },
-      methods: {
-        async getMark(e) {
-          const nameMark = e.detail.nameMark;
-          const sortMark = e.detail.sortMark;
-          this.gridData = await fetchData(nameMark, sortMark);
-        },
-      }
+    }
   })
 </script>
 </html>
