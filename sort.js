@@ -14,18 +14,18 @@ Vue.directive('sort', {
       if (cell.hasAttribute('sort-field')) {
         if (mark.sortMark !== 'default') {
           if (cell.getAttribute('sort-field') === mark.nameMark) {
-            cell.innerHTML = `<span>${cell.innerHTML} <i class="fa fa-sort fa-sort-${mark.sortMark}"></i></span>`;
+            cell.innerHTML = `<a>${cell.innerHTML} <i class="fa fa-sort fa-sort-${mark.sortMark}"></i></a>`;
             vnode.elm.dispatchEvent(new CustomEvent('sort', {detail: mark}));
           } else {
-            cell.innerHTML = `<span>${cell.innerHTML} <i class="fa fa-sort"></i></span>`;
+            cell.innerHTML = `<a>${cell.innerHTML} <i class="fa fa-sort"></i></a>`;
           }
         } else {
-          cell.innerHTML = `<span>${cell.innerHTML} <i class="fa fa-sort"></i></span>`;
+          cell.innerHTML = `<a>${cell.innerHTML} <i class="fa fa-sort"></i></a>`;
         }
         const sortArrow = cell.querySelector('.fa-sort');
         sortArrow.style.cursor = 'pointer';
         sortArrow.setAttribute('aria-hidden', 'true');
-        const spanDom = sortArrow.closest('span');
+        const spanDom = sortArrow.parentElement;
         spanDom.style.cursor = 'pointer';
 
         spanDom.addEventListener('click', function(e) {
