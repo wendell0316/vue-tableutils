@@ -1,5 +1,6 @@
 Vue.directive('sort', {
   inserted (el, binding, vnode) {
+    console.log(vnode)
     const sortCells = el.tHead.rows[0].cells;
     /**@type {boolean}*/
     const mark = {
@@ -15,7 +16,7 @@ Vue.directive('sort', {
         if (mark.sortMark !== 'default') {
           if (cell.getAttribute('sort-field') === mark.nameMark) {
             cell.innerHTML = `<a>${cell.innerHTML} <i class="fa fa-sort fa-sort-${mark.sortMark}"></i></a>`;
-            vnode.elm.dispatchEvent(new CustomEvent('sort', {detail: mark}));
+            el.dispatchEvent(new CustomEvent('sort', {detail: mark}));
           } else {
             cell.innerHTML = `<a>${cell.innerHTML} <i class="fa fa-sort"></i></a>`;
           }
@@ -58,7 +59,7 @@ Vue.directive('sort', {
             mark.sortMark = 'desc';
             mark.nameMark = cell.getAttribute('sort-field');
           }
-          vnode.elm.dispatchEvent(new CustomEvent('sort', {detail: mark}));
+          el.dispatchEvent(new CustomEvent('sort', {detail: mark}));
         })
       }
     }
