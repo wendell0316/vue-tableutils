@@ -4,7 +4,7 @@ Vue.directive('sort', {
     /**@type {boolean}*/
     const mark = {
       nameMark: '',
-      sortMark: '',
+      sortMark: 'default',
     };
     if (binding.value) {
       mark.nameMark = binding.value[0];
@@ -12,7 +12,7 @@ Vue.directive('sort', {
     }
     for (const cell of sortCells) {
       if (cell.hasAttribute('sort-field')) {
-        if (mark.sortMark) {
+        if (mark.sortMark !== 'default') {
           if (cell.getAttribute('sort-field') === mark.nameMark) {
             cell.innerHTML = `<span>${cell.innerHTML} <i class="fa fa-sort fa-sort-${mark.sortMark}"></i></span>`;
             vnode.elm.dispatchEvent(new CustomEvent('sort', {detail: mark}));
@@ -31,8 +31,7 @@ Vue.directive('sort', {
         spanDom.addEventListener('click', function(e) {
           if (mark.nameMark === '' || mark.nameMark === cell.getAttribute('sort-field')) {    //点击本节点时
             mark.nameMark = cell.getAttribute('sort-field');
-            let changeClass = /fa-sort-(.*)/.exec(sortArrow.className);
-            switch (changeClass ? changeClass[1] : 'default') {
+            switch (mark.sortMark) {
               case 'asc':
                 sortArrow.classList.remove('fa-sort-asc');
                 sortArrow.classList.add('fa-sort');
@@ -49,18 +48,14 @@ Vue.directive('sort', {
                 mark.sortMark = 'desc';
                 break;
             }
-          } else {                                                     // 点击其他元素时
-            for (const dom of Array.from(spanDom.closest('tr').children)) {
-              if (dom.getAttribute('sort-field') === mark.nameMark) {  // dom为上次点击事件的元素。
-                let sortDom = dom.childNodes[0].childNodes[1];
-                sortArrow.classList.remove('fa-sort');                 // sortArrow为当前点击的元素。
-                sortArrow.classList.add('fa-sort-desc');
-                sortDom.classList.remove('fa-sort-desc');
-                sortDom.classList.remove('fa-sort-asc');
-                sortDom.classList.add('fa-sort');
-                mark.sortMark = 'desc';
-              }
-            }
+          } else {                                                     // 点击其他元素时                                                                 // sortArrow为当前点击的元素。
+            const sortDom = spanDom.closest('tr').querySelector(`:scope > th[sort-field="${mark.nameMark}"] > span > i`);
+            sortArrow.classList.remove('fa-sort');                 // sortArrow为当前点击的元素。
+            sortArrow.classList.add('fa-sort-desc');
+            sortDom.classList.remove('fa-sort-desc');
+            sortDom.classList.remove('fa-sort-asc');
+            sortDom.classList.add('fa-sort');
+            mark.sortMark = 'desc';
             mark.nameMark = cell.getAttribute('sort-field');
           }
           vnode.elm.dispatchEvent(new CustomEvent('sort', {detail: mark}));
