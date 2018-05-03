@@ -1,13 +1,12 @@
 Vue.directive('sort', {
   inserted (el, binding, vnode) {
-    console.log(vnode)
     const sortCells = el.tHead.rows[0].cells;
     const mark = binding.value || ['', 'default'];
     for (const cell of sortCells) {
       if (cell.hasAttribute('sort-field')) {
-        if (mark[0] !== 'default') {
+        if (mark[1] !== 'default') {
           if (cell.getAttribute('sort-field') === mark[0]) {
-            cell.innerHTML = `<a>${cell.innerHTML} <i class="fa fa-sort fa-sort-${mark[1]}"></i></a>`;
+            cell.innerHTML = `<a>${cell.innerHTML} <i class="fa fa-sort-${mark[1]}"></i></a>`;
           } else {
             cell.innerHTML = `<a>${cell.innerHTML} <i class="fa fa-sort"></i></a>`;
           }

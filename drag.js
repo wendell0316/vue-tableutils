@@ -1,21 +1,17 @@
 Vue.directive('drag', {
   inserted (el, binding) {
-    el.style.boxSizing = 'border-box';
     const dragCells = Array.from(el.tHead.rows[0].cells);
-    let margin = 10;
-    if (binding.value) {
-      margin = binding.value;
-    }
+    const margin = binding.value || 10;
     let changeCellWidth;
     const positionMark = {
-      clientX: '',
-      clientOldWidth: '',
-      clientWidth: '',
-      mousedown: false,
-      target: '',
-      positionTh: 0,
+      clientX: '',            // 在单元格右侧点击时的clientX
+      clientOldWidth: '',     // 所点击的单元格的宽度
+      clientWidth: '',        // 拖动时的单元格的宽度
+      mousedown: false,       // 判断鼠标是否处于mousedown
+      target: '',             // 点击的元素
+      positionTh: 0,          // 存储下一节点的位置
     }
-    for (const [index,th] of dragCells.entries()) {
+    for (const [index, th] of dragCells.entries()) {
       if (th !== dragCells[dragCells.length - 1]) {
         th.addEventListener('mousedown', function(e) {
           if (e.offsetX > e.target.clientWidth - margin) {

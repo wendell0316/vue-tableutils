@@ -10,3 +10,10 @@
 
 ## drag参数
 * 在table标签中添加`v-drag`，后可接参数来决定在距列右侧多少像素可以拖拉。默认10像素。
+* 定义全局css样式`box-sizing: border-box`。
+* 若使用`table-layout: fixed`，建议使用：
+  ```
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+  ```
