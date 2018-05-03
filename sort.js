@@ -49,7 +49,7 @@ Vue.directive('sort', {
                 break;
             }
           } else {                                                     // 点击其他元素时                                                                 // sortArrow为当前点击的元素。
-            const sortDom = spanDom.closest('tr').querySelector(`:scope > th[sort-field="${mark.nameMark}"] > span > i`);
+            const sortDom = spanDom.closest('tr').querySelector(`:scope > th[sort-field="${mark.nameMark}"] .fa`);
             sortArrow.classList.remove('fa-sort');                 // sortArrow为当前点击的元素。
             sortArrow.classList.add('fa-sort-desc');
             sortDom.classList.remove('fa-sort-desc');
