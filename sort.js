@@ -13,7 +13,7 @@ Vue.directive('sort', {
         } else {
           cell.innerHTML = `<a>${cell.innerHTML} <i class="fa fa-sort"></i></a>`;
         }
-        const sortArrow = cell.querySelector('.fa-sort');
+        const sortArrow = cell.querySelector('.fa');
         sortArrow.style.cursor = 'pointer';
         sortArrow.setAttribute('aria-hidden', 'true');
         const spanDom = sortArrow.parentElement;
