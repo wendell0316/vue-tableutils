@@ -42,7 +42,7 @@ Vue.directive('drag', {
     });
     el.addEventListener('mousemove', function (e) {
       if (positionMark.mousedown) {
-        const width = positionMark.clientOldWidth + (e.clientX - positionMark.clientX)
+        const width = positionMark.clientOldWidth + (e.clientX - positionMark.clientX);
         positionMark.target.width = Math.max(1, width);
       }
     });
