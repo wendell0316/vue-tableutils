@@ -1,9 +1,7 @@
 Vue.directive('sort', {
   inserted (el, binding, vnode) {
     const sortCells = el.tHead.rows[0].cells;
-    let sortActive = '';
     /**@type {boolean}*/
-    let isRight = false;
     const mark = {
       nameMark: '',
       sortMark: '',
@@ -14,19 +12,25 @@ Vue.directive('sort', {
     }
     for (const cell of sortCells) {
       if (cell.hasAttribute('sort-field')) {
-        if (mark.nameMark === cell.getAttribute('sort-field')) {
-          isRight = true;
+        if (mark.sortMark) {
+          if (cell.getAttribute('sort-field') === mark.nameMark) {
+            cell.innerHTML = `<span>${cell.innerHTML} <i class="fa fa-sort fa-sort-${mark.sortMark}"></i></span>`;
+            vnode.elm.dispatchEvent(new CustomEvent('sort', {detail: mark}));
+          } else {
+            cell.innerHTML = `<span>${cell.innerHTML} <i class="fa fa-sort"></i></span>`;
+          }
+        } else {
+          cell.innerHTML = `<span>${cell.innerHTML} <i class="fa fa-sort"></i></span>`;
         }
-        cell.innerHTML = `<span>${cell.innerHTML} <i class='fa fa-sort'></i></span>`;
         const sortArrow = cell.querySelector('.fa-sort');
         sortArrow.style.cursor = 'pointer';
         sortArrow.setAttribute('aria-hidden', 'true');
         const spanDom = sortArrow.closest('span');
         spanDom.style.cursor = 'pointer';
+
         spanDom.addEventListener('click', function(e) {
-          mark.nameMark = cell.getAttribute('sort-field');
-          if (sortActive === '' || sortActive === cell.getAttribute('sort-field')) {    //点击本节点时
-            sortActive = cell.getAttribute('sort-field');
+          if (mark.nameMark === '' || mark.nameMark === cell.getAttribute('sort-field')) {    //点击本节点时
+            mark.nameMark = cell.getAttribute('sort-field');
             let changeClass = /fa-sort-(.*)/.exec(sortArrow.className);
             switch (changeClass ? changeClass[1] : 'default') {
               case 'asc':
@@ -45,26 +49,25 @@ Vue.directive('sort', {
                 mark.sortMark = 'desc';
                 break;
             }
-          } else {                                              //点击其他元素时
+          } else {                                                     // 点击其他元素时
             for (const dom of Array.from(spanDom.closest('tr').children)) {
-              if (dom.getAttribute('sort-field') === sortActive) {
-                sortArrow.classList.remove('fa-sort');
+              if (dom.getAttribute('sort-field') === mark.nameMark) {  // dom为上次点击事件的元素。
+                let sortDom = dom.childNodes[0].childNodes[1];
+                sortArrow.classList.remove('fa-sort');                 // sortArrow为当前点击的元素。
                 sortArrow.classList.add('fa-sort-desc');
-                dom.childNodes[0].childNodes[1].classList.remove('fa-sort-desc');
-                dom.childNodes[0].childNodes[1].classList.remove('fa-sort-asc');
-                dom.childNodes[0].childNodes[1].classList.add('fa-sort');
+                sortDom.classList.remove('fa-sort-desc');
+                sortDom.classList.remove('fa-sort-asc');
+                sortDom.classList.add('fa-sort');
                 mark.sortMark = 'desc';
               }
             }
-            sortActive = cell.getAttribute('sort-field');
+            mark.nameMark = cell.getAttribute('sort-field');
           }
           vnode.elm.dispatchEvent(new CustomEvent('sort', {detail: mark}));
         })
       }
     }
-    if (isRight) {
-      vnode.elm.dispatchEvent(new CustomEvent('sort', {detail: mark}));
-    } else {
+    if (mark.nameMark && !el.querySelector(`th[sort-field="${mark.nameMark}"]`)) {
       throw new Error("初始化排序失败，检查拼写或查看是否绑定'sort-field'");
     }
   }
