@@ -44,9 +44,9 @@ describe('sort测试', () => {
   });
   it('点击一次排序应该正确', async function() {
     const clickTargets = await page.evaluate(x => {
-      return [...document.querySelectorAll('.fa')].map(x => {
-        x.parentElement.id = x.parentElement.parentElement.getAttribute('sort-field');
-        return x.parentElement.parentElement.getAttribute('sort-field');
+      return [...document.querySelectorAll('th[sort-field]')].map(x => {
+        x.querySelector('a').id = x.getAttribute('sort-field');
+        return x.querySelector('a').id;
       });
     });
     clickTargets.forEach(async (clickTarget, index) => {
