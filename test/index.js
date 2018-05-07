@@ -100,7 +100,7 @@ describe('单元测试', () => {
     });
   });
 
-  describe('sort测试',async () =>{
+  describe('sort测试', async () =>{
     it('点击一次排序应该正确', async function() {
       this.timeout(10000);
       await timeout(1000);
