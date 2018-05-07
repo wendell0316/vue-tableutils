@@ -10,8 +10,8 @@ describe('单元测试', () => {
   let browser;
   /** @type {puppeteer.Page} */
   let page;
-  let clientCells;
-  const fileUrl = 'file://' + path.resolve('index.html');
+  const fileUrl = 'file://' + path.resolve(__dirname, '..', 'index.html');
+
   before (async () => {
     browser = await puppeteer.launch();
   });
@@ -26,15 +26,18 @@ describe('单元测试', () => {
     await page.goto(fileUrl);
   });
 
-  describe('drag测试',async function() {
+  describe('drag测试', async function() {
+    /** @type {number[]} */
+    let clientCells;
     this.timeout(60000);
+
     beforeEach (async () => {
       clientCells = await page.evaluate(x => {
         return [...document.querySelectorAll('thead th')].map(x => x.cellIndex);
       });
     });
 
-    it('拖动左侧应该正确', async () => {
+    it('拖动左侧应该无变化', async () => {
       const left = clientCells[0];
       const thOldWidth = await page.evaluate(x => {
         return document.querySelector(`thead th:nth-child(${x + 1})`).clientWidth;
@@ -53,7 +56,7 @@ describe('单元测试', () => {
     });
 
     it('拖动中间应该正确', async () => {
-      const center = parseInt(clientCells.length / 2) - 1;
+      const center = Math.trunc(clientCells.length / 2) - 1;
       const thsOldWidth = await page.evaluate(x => {
         return [...document.querySelectorAll('thead th')].map(x => x.clientWidth);
       });
@@ -67,7 +70,6 @@ describe('单元测试', () => {
       let clientsWidth = await page.evaluate(x => {
         return [...document.querySelectorAll('thead th')].map(x => x.clientWidth);
       }, center);
-      console.log(clientsWidth);
       for (const cellIndex of clientCells) {
         if (cellIndex === center) {
           assert.equal(clientsWidth[cellIndex], thsOldWidth[cellIndex] + 30);
@@ -80,7 +82,7 @@ describe('单元测试', () => {
     });
 
     it('拖动右侧应该成功', async () => {
-      const right = parseInt(clientCells[clientCells.length - 1]);
+      const right = clientCells[clientCells.length - 1];
       const thOldWidth = await page.evaluate(x => {
         return document.querySelector(`thead th:nth-child(${x + 1})`).clientWidth;
       }, right);
@@ -108,7 +110,7 @@ describe('单元测试', () => {
           return {
             id : x.querySelector('a').id,
             cellIndex : x.cellIndex,
-          };
+          }
         });
       });
       for (const clickTarget of clickTargets) {
@@ -116,7 +118,7 @@ describe('单元测试', () => {
           return {
             data: [...document.querySelectorAll(`tbody td:nth-child(${x[0] + 1})`)].map(x => x.innerText),
             sortMark: /fa-sort-(.*)/.exec(document.querySelector(`#${x[1]} i`).className) ? 'asc' : 'desc',
-          };
+          }
         }, [clickTarget.cellIndex, clickTarget.id]);
         await page.click('#' + clickTarget.id);
         await timeout(500);
@@ -124,7 +126,7 @@ describe('单元测试', () => {
           return {
             data: [...document.querySelectorAll(`tbody td:nth-child(${x[0] + 1})`)].map(x => x.innerText),
             sortMark: document.querySelector(`#${x[1]} i`).className,
-          };
+          }
         }, [clickTarget.cellIndex, clickTarget.id]);
         if (isNaN(oldDataOne.data[1])) {
           assert.deepEqual(oldDataOne.data.sort((a, b) => b.localeCompare(a)), resultOne.data);
@@ -143,7 +145,7 @@ describe('单元测试', () => {
         return {
           data: [...document.querySelectorAll('tbody td:first-child')].map(x => +x.innerText),
           sortMark: document.querySelector('th[sort-field="id"] i').className,
-        };
+        }
       });
       await page.click('.fa');
       await timeout(500);
@@ -151,10 +153,18 @@ describe('单元测试', () => {
         return {
           clickData: [...document.querySelectorAll('tbody td:first-child')].map(x => +x.innerText),
           sortMark: document.querySelector('th[sort-field="id"] i').className,
-        };
+        }
       });
       assert.deepEqual(oldDataTwo.data.sort((a, b) => a - b), resultTwo.clickData);
       assert.equal(oldDataTwo.sortMark.replace(/desc/, 'asc'), resultTwo.sortMark);
     });
+  });
+
+  afterEach(async () => {
+    await page.close();
+  });
+
+  after(async () => {
+    await browser.close();
   });
 });
