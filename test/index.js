@@ -3,14 +3,15 @@ const mocha = require('mocha');
 const assert = require('assert');
 const { promisify } = require('util');
 const timeout = promisify(setTimeout);
+const path = require('path');
 
 describe('sort测试', () => {
   /** @type {puppeteer.Browser} */
   let browser;
   /** @type {puppeteer.Page} */
   let page;
-
-  before(async () => {
+  const fileUrl = 'file://' + path.resolve('index.html');
+  before (async () => {
     browser = await puppeteer.launch();
   });
   beforeEach(async function() {
@@ -20,7 +21,7 @@ describe('sort测试', () => {
       width: 1200,
       height: 1000,
     });
-    await page.goto('file:///Users/wendell/vue-tableutils/index.html');
+    await page.goto(fileUrl);
   });
   describe('drag测试', () => {
     it('拖动应该正确', async function() {
@@ -42,6 +43,7 @@ describe('sort测试', () => {
       });
     });
   });
+
   it('点击一次排序应该正确', async function() {
     const clickTargets = await page.evaluate(x => {
       return [...document.querySelectorAll('th[sort-field]')].map(x => {
@@ -53,6 +55,7 @@ describe('sort测试', () => {
       const oldDataOne = await page.evaluate(x => {
         return {
           data: [...document.querySelectorAll(`tbody td:nth-child(${x})`)].map(x => +x.innerText),
+          sortMark: document.querySelector("th[sort-field='id'] i").className,
         }
       }, index);
       await page.click('#' + clickTarget);
@@ -60,11 +63,14 @@ describe('sort测试', () => {
       const resultOne = await page.evaluate(x => {
         return {
           data: [...document.querySelectorAll(`tbody td:nth-child(${x})`)].map(x => +x.innerText),
+          sortMark: document.querySelector("th[sort-field='id'] i").className,
         }
       }, index);
       assert.deepEqual(oldDataOne.data.sort((a, b) => {return b - a}), resultOne.data);
+      assert.equal(oldDataOne.sortMark.replace(/fa-sort/, 'fa-sort-desc'), resultOne.sortMark);
     });
   });
+
   it('点击两次排序应该正确', async function() {
     this.timeout(60000);
     await page.click('.fa');
@@ -84,9 +90,6 @@ describe('sort测试', () => {
       }
     });
     assert.deepEqual(oldDataTwo.data.sort((a, b) => {return a - b}), resultTwo.clickData);
+    assert.equal(oldDataTwo.sortMark.replace(/desc/, 'asc'), resultTwo.sortMark);
   });
-
 });
-
-
-
