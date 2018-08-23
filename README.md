@@ -1,5 +1,6 @@
 # vue-tableutils
 给vue后台项目用的实用table指令
+demo[示例](https://wendell0316.github.io/vue-tableutils/index.html "Title").
 
 ## sort参数
 * 在table标签中添加`v-sort`指令,后可接参数表示默认排序。
